@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<title>About Chicken and Corn Game</title>
+  	<title>About Chickens and Corn Game</title>
    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css" />	
@@ -18,21 +18,53 @@
 		<div class="container">
 			<h1>About</h1>
 			<h2 class="lead">
-    			Chicken and Corn Game
+    			Chickens and Corn Game
 			</h2>
       </div>
     </div>
 	<div class="container">
-		<p>
-		I created this 100% client side JavaScript implementation of the Chick and Corn game 
-		as part of a class assignment for my DCS907 Algorithms class. I proposed this assignment  
-		after working on another assignment where we were asked analyze the problem and solutions
-		for the game.  We were pointed to a web implementation of the game/puzzle, and while that
-		implementation was OK, it lacked significant documentation of how the chickens moved.  This
-		and other minor problems with that implementation led be to the idea of producing one of
-		my one, and one in which instead of only playing the game manually, I could allow JavaScript
-		implementations of the algorithms to be supplied and executed.
-		</p>
+	
+<p>
+I created this 100% client side JavaScript implementation of the 
+<a targer="_blank" href="http://www.cut-the-knot.org/SimpleGames/RFWH.shtml">Chickens in the Corn game</a> 
+as part of a class assignment for my DCS907 Algorithms class. I proposed this assignment  
+after working on another assignment where we were asked analyze the problem and solutions
+for the game.  We were pointed to a web implementation of the game/puzzle, and while that
+implementation was OK, it lacked significant documentation of how the chickens moved.  This
+and other minor problems with that implementation led be to the idea of producing one of
+my one, and one in which instead playing the game manually, I could allow JavaScript
+implementations of the algorithms to be supplied and executed.
+</p>
+<p>
+The idea that to play this version of the game you have to actually code the algorithm 
+makes is so more real.  That is you can't just look over the board and almost holistically 
+decide what the next optimal move would be.  Instead you have to codify the algorithm, not
+leaving a thing out.  In the end this turned out to be more difficult than I thought.
+</p>
+<p>
+I originally expected to to have to write simple basic code for useful algorithms.  But as 
+I found out, there are a lot of things to consider.  I also got to the point where the 
+implementations of the human and the chicken pieces would sometimes get into an infinite 
+loop, never resolving itself.  To counter this I had to add an element of randomness in the
+algorithm. So for situations where there were more than one best move (for the greedy algorithm) 
+I had to randomly pick one of them, instead of always picking the first one.
+</p>
+<p>
+This any many other things can be found and discovered if you play with this enough and
+experiment with development of the algorithms that drive each of the four pieces.
+</p>
+<p>
+This implementation is by no means complete (to my satisfaction), but complete enough to 
+submit for my assignment before the deadline.  So, for now I'll leave it in the state that it
+is. 
+</p>
+<p>
+If you find this application useful, drop me a line.  It might 
+encourage me to keep it updated.
+</p>
+<p>
+Have fun.
+</p>
 		
 		<div class="alert alert-dark" role="alert">
 			<p>
