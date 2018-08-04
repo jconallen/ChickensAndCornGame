@@ -2,7 +2,7 @@
 
 I created this 100% client side JavaScript implementation of the 
 [Chickens in the Corn game](http://www.cut-the-knot.org/SimpleGames/RFWH.shtml) 
-as part of a class assignment for my DCS907 Algorithms class. I proposed this assignment  
+as part of a class assignment for my DCS907 Algorithms class. I proposed this assignment
 after working on another assignment where we were asked analyze the problem and solutions
 for the game.  We were pointed to a web implementation of the game/puzzle, and while that
 implementation was OK, it lacked significant documentation of how the chickens moved.  This
