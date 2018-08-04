@@ -21,8 +21,7 @@
 	    	<div class="col-md-4">
 	    		<h1>Chicken and Corn Game</h1>
 	    		<a href="instructions.html" target="_blank">Instructions</a> |
-	    		<a href="about.html" target="_blank">About</a> | 
-	    		<a href="docs/GettingStarted.html" target="_blank">Docs</a>
+	    		<a href="about.html" target="_blank">About</a> 
 	    	</div>
 	    	
 	 	</div>
@@ -64,7 +63,7 @@
 				<div class="panel-heading" >
 			    	<h3 id="titleGameboard" class="panel-title">Gameboard</h3>
 			    </div>
-			    <div class="panel-body" style="margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom:0;">
+			    <div class="panel-body" style="min-height: 500px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom:0;">
 			    	<table id="gameboard">
 			    		<tr></tr>
 						<tr>
@@ -189,7 +188,10 @@
 						</tr>
 						
 					</table>
-					<p></p>
+					<div class="container" style="height: 200px; width: 100%; "><br>
+ 						<textarea id="console" style="width: 100%; min-height: 200px; font-family:'Courier'; font-size: 8pt;" > </textarea>
+ 					</div>
+
 			  	</div>
 
 			</div>
@@ -213,7 +215,7 @@
                   
                   <div class="tab-content" >
 					<div id="rooster" class="container tab-pane" style="height: 100%; width: 100%; min-height: 400px;"><br>
- 						<textarea id="roosterAlgorithm" style="min-width: 100%; min-height: 400px; font-family:'Courier'" > </textarea>
+ 						<textarea id="roosterAlgorithm" style="min-width: 100%; min-height: 400px; font-family:'Courier'; font-size: 8pt;" > </textarea>
  					</div>
                   
 					<div id="farmer" class="container tab-pane active" style="height: 100%; width: 100%; min-height: 400px;"><br>
@@ -221,11 +223,11 @@
  					</div>
                   
 					<div id="wife" class="container tab-pane" style="height: 100%; width: 100%; min-height: 400px;"><br>
- 						<textarea id="wifeAlgorithm" style="width:100%; height: 100%; min-height: 400px; font-family:'Courier';" ></textarea>
+ 						<textarea id="wifeAlgorithm" style="width:100%; height: 100%; min-height: 400px; font-family:'Courier'; font-size: 8pt;" ></textarea>
  					</div>
                   
 					<div id="hen" class="container tab-pane" style="height: 100%; width: 100%; min-height: 400px;"><br>
- 						<textarea id="henAlgorithm" style="width:100%; height: 100%; min-height: 400px; font-family:'Courier'; " ></textarea>
+ 						<textarea id="henAlgorithm" style="width:100%; height: 100%; min-height: 400px; font-family:'Courier'; font-size: 8pt;" ></textarea>
  					</div>
                   
                   </div>
@@ -241,17 +243,9 @@
 	<script src="js/game.js"></script>
 	<script type="text/javascript">
 	
-	function pause(ms){
-		var d = new Date();
-		var d2 = null;
-		do { d2 = new Date(); }
-		while(d2-d < ms);
-	}
-
-	
 	function updateDisplay(){
 		var board = document.getElementById("gameboard");
-		Game.setBoard(board);
+		Game._setBoard(board);
 		
 		var title = document.getElementById("titleGameboard");
 		title.innerHTML = "Gameboard - Moves: " + Game.moves();
@@ -261,26 +255,26 @@
 		
 		elm = document.getElementById("roosterAlgorithm");
 		if( elm ) {
-			elm.innerHTML = Rooster.algorithm();
+			elm.innerHTML = Rooster._algorithm;
 		} 
 		elm = document.getElementById("farmerAlgorithm");
 		if( elm ) {
-			elm.innerHTML = Farmer.algorithm();
+			elm.innerHTML = Farmer._algorithm;
 		} 
 		elm = document.getElementById("wifeAlgorithm");
 		if( elm ) {
-			elm.innerHTML = Wife.algorithm();
+			elm.innerHTML = Wife._algorithm;
 		} 
 		elm = document.getElementById("henAlgorithm");
 		if( elm ) {
-			elm.innerHTML = Hen.algorithm();
+			elm.innerHTML = Hen._algorithm;
 		} 
 		
 	}
 
 	function next(){
 		try{
-			if( !Game.next() ) {
+			if( !Game._next() ) {
 				// if returns true, then game over, .. man.
 				
 				var elm;
@@ -304,12 +298,14 @@
 	}
 	
 	function restart(){
-		Game.reset();
+		Game._reset();
 		var elm;
 		elm = document.getElementById("nextBtn");
 		elm.disabled = false;
 		//elm = document.getElementById("runBtn");
 		//elm.disabled = false;
+		elm = document.getElementById("console");
+		elm.value = "";
 		updateDisplay();
 	}
 	
@@ -319,19 +315,19 @@
 
 		elm = document.getElementById("roosterAlgorithm");
 		algorithm = elm.value;
-		Rooster.setAlgorithm( algorithm );
+		Rooster._algorithm = algorithm;
 		
 		elm = document.getElementById("farmerAlgorithm");
 		algorithm = elm.value;
-		Farmer.setAlgorithm( algorithm );
+		Farmer._algorithm = algorithm;
 
 		elm = document.getElementById("wifeAlgorithm");
 		algorithm = elm.value;
-		Wife.setAlgorithm( algorithm );
+		Wife._algorithm = algorithm;
 
 		elm = document.getElementById("henAlgorithm");
 		algorithm = elm.value;
-		Hen.setAlgorithm( algorithm );
+		Hen._algorithm = algorithm;
 }
 	
 	function readDefaultAlgorithm(piece, url)	{
@@ -341,7 +337,7 @@
 	        if(rawFile.readyState === 4){
 	            if(rawFile.status === 200 || rawFile.status == 0) {
 	                var allText = rawFile.responseText;
-	                piece.setAlgorithm(allText);
+	                piece._algorithm = allText;
 	                restart();
 	            }
 	        }
@@ -355,6 +351,7 @@
 	var Wife = new Piece("Wife", new Position(4,5), "Game.randomMove(Wife);");
 	var Hen = new Piece("Hen", new Position(4,7), "Game.randomMove(Hen);");
 	var Game = new _Game(Rooster, Farmer, Wife, Hen);
+	var Me;  // the current piece
 
 	readDefaultAlgorithm(Rooster, "js/rooster.js");
 	readDefaultAlgorithm(Farmer, "js/farmer.js");
