@@ -5,8 +5,8 @@ if( Wife.isNextTo(Rooster) ){
 	
     var msg = "Wife: ";
     
-    var fr = Wife.position().row;
-    var fc = Wife.position().col;
+    var fr = Wife.position.row;
+    var fc = Wife.position.col;
 
     var minDistance = 16;
     var minDirection;

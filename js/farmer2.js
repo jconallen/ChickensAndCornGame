@@ -5,8 +5,8 @@ if( Farmer.isNextTo(Hen) ){
 	
     var msg = "Farmer: ";
    
-	var fr = Farmer.position().row();
-	var fc = Farmer.position().col();
+	var fr = Farmer.position.row();
+	var fc = Farmer.position.col();
 
     var minDistance = 14; // farthest possible distance
     var minDirection;

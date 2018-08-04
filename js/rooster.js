@@ -1,5 +1,5 @@
-var fr = Rooster.position().row;
-var fc = Rooster.position().col;
+var fr = Me.position.row;
+var fc = Me.position.col;
 
 var maxDistance = 0;
 var maxDirection;

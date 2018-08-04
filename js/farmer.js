@@ -5,8 +5,8 @@ if( Me.isNextTo(Hen) ){
 	
     var msg = "Farmer: ";
    
-	var fr = Me.position().row;
-	var fc = Me.position().col;
+	var fr = Me.position.row;
+	var fc = Me.position.col;
 	
 	var distances = []; 
 

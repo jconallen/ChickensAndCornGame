@@ -3,8 +3,8 @@ if( Wife.isNextTo(Rooster) ){
 	Wife.capture(Rooster);
 } else {
 	
-	var fr = Wife.position().row;
-	var fc = Wife.position().col;
+	var fr = Wife.position.row;
+	var fc = Wife.position.col;
 	
 	var distances = []; 
 

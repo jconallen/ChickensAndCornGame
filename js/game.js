@@ -1,30 +1,25 @@
 class Piece {
 	
-	constructor( id, position, code ) {
+	constructor( name, position, code ) {
 		this._active = true;
-		this.id = id;
+		this.name = name;
 		this._algorithm = code;
-		this._position = position;
-	}
-	
-	
-	position(){
-		return this._position;
+		this.position = position;
 	}
 	
 	capture( piece ) {
 		if( piece instanceof Piece ) {
-		   if( (this.id == "Farmer" || this.id == "Wife") &&  (piece.id == "Rooster" || piece.id == "Hen") ) {
+		   if( (this.name == "Farmer" || this.name == "Wife") &&  (piece.name == "Rooster" || piece.name == "Hen") ) {
 			   if( this.isNextTo( piece ) ){
 				   	this._active = false;
-				   	this._position = piece.position();
+				   	this.position = piece.position;
 				   	piece._active = false;
 				   	return "X";
 			   } else {
-				   throw this.id + " not next to " + this.id + ", can not capture.";
+				   throw this.name + " not next to " + this.name + ", can not capture.";
 			   }
 		   }
-		   throw "Invalid argument types.  " + this.id + " can not capture " + piece.id + ".";
+		   throw "Invalid argument types.  " + this.name + " can not capture " + piece.name + ".";
 		}
 		throw "Invalid argument for capture: " + piece.constructor.name;
 	}
@@ -35,7 +30,7 @@ class Piece {
 	
 	_next(){
 		
-		var availableMoves = Game.availableMoves(this.position());
+		var availableMoves = Game.availableMoves(this.position);
 		
 		var result;
 		try{
@@ -55,8 +50,8 @@ class Piece {
 			
 			if( availableMoves.indexOf(move) >= 0 ){
 				
-				var row = this._position.row;
-				var col = this._position.col;
+				var row = this.position.row;
+				var col = this.position.col;
 				
 				switch( move ) {
 				case 'U': row = row - 1; break;
@@ -65,15 +60,15 @@ class Piece {
 				case 'R': col = col + 1; break;
 				}
 				
-				this._position  = new Position(row, col);
+				this.position  = new Position(row, col);
 				
 			} else {
-				throw "Invalid move " + result + " for " + this.id ; 
+				throw "Invalid move " + result + " for " + this.name ; 
 			}
 			
 			
 		} else {
-			throw this.id + " must make a move.";  
+			throw this.name + " must make a move.";  
 		}
 		
 		
@@ -81,7 +76,7 @@ class Piece {
 	
 	isNextTo(peice) {
 		
-		return peice.position().isNextTo(this._position);
+		return peice.position.isNextTo(this.position);
 	}
 	
 	moveRandom(){
@@ -89,8 +84,8 @@ class Piece {
 	}
 	
 	distanceTo( row, col ) {
-		var r = this._position.row;
-		var c = this._position.col;
+		var r = this.position.row;
+		var c = this.position.col;
 		
 		var d = Math.abs( row - r ) + Math.abs( col - c ) ;
 		return d;
@@ -105,44 +100,6 @@ class Position {
 		this.col = col;
 	};
 	
-	
-	move(direction){
-		switch(direction){
-		case 'U': {
-			if( this.col>0 && !_game.isOccupied(this.row, this.col-1) ) {
-				this.col -= 1;
-			} else {
-				throw "Invalid move up";
-			}
-			break;
-		}
-		case 'D': {
-			if( this.col<7 && !_game.isOccupied(this.row, this.col+1) ) {
-				this.col += 1;
-			} else {
-				throw "Invalid move down";
-			}
-			break;
-		}
-		case 'L': {
-			if( this.row>0 && !_game.isOccupied(this.row-1, this.col) ) {
-				this.row -= 1;
-			} else {
-				throw "Invalid move left";
-			}
-			break;
-		}
-		case 'R': {
-			if( this.row<7 && !_game.isOccupied(this.row+1, this.col) ) {
-				this.row += 1;
-			} else {
-				throw "Invalid move right";
-			}
-			break;
-		}
-		}
-		
-	};
 	
 	isNextTo(otherPosition) {
 		if( this.row == otherPosition.row ) {
@@ -200,24 +157,24 @@ class _Game {
 			col = arg2;
 		}
 		
-		if( this._rooster.position().row==row && this._rooster.position().col==col ) return true;
-		if( this._farmer.position().row==row && this._farmer.position().col==col ) return true;
-		if( this._wife.position().row==row && this._wife.position().col==col ) return true;
-		if( this._hen.position().row==row && this._hen.position().col==col ) return true;
+		if( this._rooster.position.row==row && this._rooster.position.col==col ) return true;
+		if( this._farmer.position.row==row && this._farmer.position.col==col ) return true;
+		if( this._wife.position.row==row && this._wife.position.col==col ) return true;
+		if( this._hen.position.row==row && this._hen.position.col==col ) return true;
 		return false;
 	}
 
-	availableMoves(fromRow,fromCol){
+	availableMoves(arg1,arg2){
 		var moves = [];
 		var row;
 		var col;
 		
-		if( fromRow instanceof Position ) {
-			row = fromRow.row;
-			col = fromRow.col;
+		if( arg1 instanceof Position ) {
+			row = arg1.row;
+			col = arg1.col;
 		} else {
-			row = fromRow;
-			col = fromCol;
+			row = arg1;
+			col = arg2;
 		}
 		
 		if( row>0 && !this.isOccupied(row-1, col) ) moves.push("U");
@@ -229,7 +186,7 @@ class _Game {
 	}
 	
 	name(){
-		return 'Chicken and Corn Game';
+		return 'Chickens and Corn Game';
 	};
 
 	randomInt(min, max) {
@@ -244,7 +201,7 @@ class _Game {
 			am = arg1;
 			
 		} else if( arg1 instanceof Piece ){
-			var position = arg1.position();
+			var position = arg1.position;
 			am = this.availableMoves( position.row, position.col );
 		}
 		
@@ -265,27 +222,27 @@ class _Game {
 		}
 		
 		if( this._rooster.isActive() ) {
-			table.rows[this._rooster.position().row+2].cells[this._rooster.position().col+1].innerHTML = "R";
+			table.rows[this._rooster.position.row+2].cells[this._rooster.position.col+1].innerHTML = "R";
 		} else {
-			table.rows[this._rooster.position().row+2].cells[this._rooster.position().col+1].innerHTML = "X";
+			table.rows[this._rooster.position.row+2].cells[this._rooster.position.col+1].innerHTML = "X";
 		}
 
 		if( this._farmer.isActive() ) {
-			table.rows[this._farmer.position().row+2].cells[this._farmer.position().col+1].innerHTML = "F";
+			table.rows[this._farmer.position.row+2].cells[this._farmer.position.col+1].innerHTML = "F";
 		} else {
-			table.rows[this._farmer.position().row+2].cells[this._farmer.position().col+1].innerHTML = "X";
+			table.rows[this._farmer.position.row+2].cells[this._farmer.position.col+1].innerHTML = "X";
 		}
 		
 		if( this._wife.isActive() ) {
-			table.rows[this._wife.position().row+2].cells[this._wife.position().col+1].innerHTML = "W";
+			table.rows[this._wife.position.row+2].cells[this._wife.position.col+1].innerHTML = "W";
 		} else {
-			table.rows[this._wife.position().row+2].cells[this._wife.position().col+1].innerHTML = "X";
+			table.rows[this._wife.position.row+2].cells[this._wife.position.col+1].innerHTML = "X";
 		}
 
 		if( this._hen.isActive() ) {
-			table.rows[this._hen.position().row+2].cells[this._hen.position().col+1].innerHTML = "H";
+			table.rows[this._hen.position.row+2].cells[this._hen.position.col+1].innerHTML = "H";
 		} else {
-			table.rows[this._hen.position().row+2].cells[this._hen.position().col+1].innerHTML = "X";
+			table.rows[this._hen.position.row+2].cells[this._hen.position.col+1].innerHTML = "X";
 		}
 
 	}
@@ -294,16 +251,16 @@ class _Game {
 
 	_reset(){
 		// put farmer and chicken in place
-		this._rooster._position = new Position(4,0);
+		this._rooster.position = new Position(4,0);
 		this._rooster._active = true;
 
-		this._farmer._position = new Position(4,2);
+		this._farmer.position = new Position(4,2);
 		this._farmer._active = true;
 
-		this._wife._position = new Position(4,5);
+		this._wife.position = new Position(4,5);
 		this._wife._active = true;
 
-		this._hen._position = new Position(4,7);
+		this._hen.position = new Position(4,7);
 		this._hen._active = true;
 		
 		this._moves = 0;
