@@ -51,6 +51,18 @@
 						<button type="button" class="btn btn-default" onclick="updateAlgorithms()" id="updateBtn">
 							<span class="glyphicon glyphicon-cloud-upload"></span> Update Algorithms
 						</button>
+						<button type="button" class="btn btn-default" onclick="setPosition(Rooster)" id="btnSetRooster">
+							R
+						</button>
+						<button type="button" class="btn btn-default" onclick="setPosition(Farmer)" id="btnSetFarmer">
+							F
+						</button>
+						<button type="button" class="btn btn-default" onclick="setPosition(Wife)" id="btnSetWife">
+							W
+						</button>
+						<button type="button" class="btn btn-default" onclick="setPosition(Hen)" id="btnSetHen">
+							H
+						</button>
 				</div>
 		    </div>
 	    </div>
@@ -344,6 +356,33 @@
 	        }
 	    }
 	    rawFile.send(null);
+	}
+	
+
+	
+	function setPosition(piece){
+		var board = document.getElementById('gameboard'),
+	    cells = board.getElementsByTagName('td');
+
+		for (var i=0,len=cells.length; i<len; i++){
+	    	cells[i].onclick = function(){
+	    		var col = Number(this.id.charAt(1));
+	    		var row = Number(this.id.charAt(3));
+		        
+		        if( !Game.isOccupied(row, col) ) {
+		        	piece.position = new Position(row, col);
+			        for (var j=0,len=cells.length; j<len; j++){
+				    	cells[j].onclick = null;
+					}
+			        Game._setBoard(board);
+		        } else {
+					alert("Position must be empty to set another piece.");		        	
+		        }
+		        
+	    	}
+		}
+		updateDisplay();
+		
 	}
 	
 
