@@ -1,3 +1,4 @@
+![icon](images/chicken-icon.png)
 # Chickens and Corn Game
 
 I created this 100% client side JavaScript implementation of the 
