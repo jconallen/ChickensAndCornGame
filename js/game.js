@@ -80,10 +80,22 @@ class Piece {
 	}
 	
 	moveRandom(){
-		return Game.randomMove(this);
+		return Game._randomMove(this);
 	}
 	
-	distanceTo( row, col ) {
+	distanceTo( arg1, arg2 ) {
+		
+		var row;
+		var col;
+		
+		if( arg1 instanceof Position ) {
+			row = arg1.row;
+			col = arg1.col;
+		} else {
+			row = arg1;
+			col = arg2;
+		}
+		
 		var r = this.position.row;
 		var c = this.position.col;
 		
@@ -113,12 +125,7 @@ class Position {
 
 class _Game {
 	
-	constructor( rooster, farmer, wife, hen ) {
-		
-		this._rooster = rooster;
-		this._farmer = farmer;
-		this._wife = wife;
-		this._hen = hen;
+	constructor( ) {
 		
 		this._moves = 0;
 
@@ -157,10 +164,10 @@ class _Game {
 			col = arg2;
 		}
 		
-		if( this._rooster.position.row==row && this._rooster.position.col==col ) return true;
-		if( this._farmer.position.row==row && this._farmer.position.col==col ) return true;
-		if( this._wife.position.row==row && this._wife.position.col==col ) return true;
-		if( this._hen.position.row==row && this._hen.position.col==col ) return true;
+		if( Rooster.position.row==row && Rooster.position.col==col ) return true;
+		if( Farmer.position.row==row && Farmer.position.col==col ) return true;
+		if( Wife.position.row==row && Wife.position.col==col ) return true;
+		if( Hen.position.row==row && Hen.position.col==col ) return true;
 		return false;
 	}
 
@@ -193,7 +200,7 @@ class _Game {
 	    return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 	
-	randomMove(arg1){
+	_randomMove(arg1){
 		var am;
 		
 		if( typeof arg1 === 'array' && arg1.length>0 ) {
@@ -221,28 +228,28 @@ class _Game {
 			}
 		}
 		
-		if( this._rooster.isActive() ) {
-			table.rows[this._rooster.position.row+2].cells[this._rooster.position.col+1].innerHTML = "R";
+		if( Rooster.isActive() ) {
+			table.rows[Rooster.position.row+2].cells[Rooster.position.col+1].innerHTML = "R";
 		} else {
-			table.rows[this._rooster.position.row+2].cells[this._rooster.position.col+1].innerHTML = "X";
+			table.rows[Rooster.position.row+2].cells[Rooster.position.col+1].innerHTML = "X";
 		}
 
-		if( this._farmer.isActive() ) {
-			table.rows[this._farmer.position.row+2].cells[this._farmer.position.col+1].innerHTML = "F";
+		if( Farmer.isActive() ) {
+			table.rows[Farmer.position.row+2].cells[Farmer.position.col+1].innerHTML = "F";
 		} else {
-			table.rows[this._farmer.position.row+2].cells[this._farmer.position.col+1].innerHTML = "X";
+			table.rows[Farmer.position.row+2].cells[Farmer.position.col+1].innerHTML = "X";
 		}
 		
-		if( this._wife.isActive() ) {
-			table.rows[this._wife.position.row+2].cells[this._wife.position.col+1].innerHTML = "W";
+		if( Wife.isActive() ) {
+			table.rows[Wife.position.row+2].cells[Wife.position.col+1].innerHTML = "W";
 		} else {
-			table.rows[this._wife.position.row+2].cells[this._wife.position.col+1].innerHTML = "X";
+			table.rows[Wife.position.row+2].cells[Wife.position.col+1].innerHTML = "X";
 		}
 
-		if( this._hen.isActive() ) {
-			table.rows[this._hen.position.row+2].cells[this._hen.position.col+1].innerHTML = "H";
+		if( Hen.isActive() ) {
+			table.rows[Hen.position.row+2].cells[Hen.position.col+1].innerHTML = "H";
 		} else {
-			table.rows[this._hen.position.row+2].cells[this._hen.position.col+1].innerHTML = "X";
+			table.rows[Hen.position.row+2].cells[Hen.position.col+1].innerHTML = "X";
 		}
 
 	}
@@ -251,17 +258,17 @@ class _Game {
 
 	_reset(){
 		// put farmer and chicken in place
-		this._rooster.position = new Position(4,0);
-		this._rooster._active = true;
+		Rooster.position = new Position(4,0);
+		Rooster._active = true;
 
-		this._farmer.position = new Position(4,2);
-		this._farmer._active = true;
+		Farmer.position = new Position(4,2);
+		Farmer._active = true;
 
-		this._wife.position = new Position(4,5);
-		this._wife._active = true;
+		Wife.position = new Position(4,5);
+		Wife._active = true;
 
-		this._hen.position = new Position(4,7);
-		this._hen._active = true;
+		Hen.position = new Position(4,7);
+		Hen._active = true;
 		
 		this._moves = 0;
 
@@ -269,21 +276,21 @@ class _Game {
 	
 	_next(){
 		// first farmer moves
-		if( this._farmer.isActive() ){
-			this._farmer._next();
+		if( Farmer.isActive() ){
+			Farmer._next();
 		}
-		if( this._wife.isActive() ) {
-			this._wife._next();
+		if( Wife.isActive() ) {
+			Wife._next();
 		}
-		if( this._rooster.isActive() ) {
-			this._rooster._next();
+		if( Rooster.isActive() ) {
+			Rooster._next();
 		}
-		if( this._hen.isActive() ) {
-			this._hen._next();
+		if( Hen.isActive() ) {
+			Hen._next();
 		}
 		this._moves += 1;
 		
-		return ( this._farmer.isActive() || this._wife.isActive() );
+		return ( Farmer.isActive() || Wife.isActive() );
 	};
 	
 
