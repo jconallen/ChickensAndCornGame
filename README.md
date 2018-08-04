@@ -29,8 +29,13 @@ This implementation is by no means complete (to my satisfaction), but complete e
 submit for my assignment before the deadline.  So, for now I'll leave it in the state that it
 is. 
 
-If you find this application useful, drop me a line; jconallen at acm dot org.  It might 
-encourage me to keep it updated.
+You can try it out in your browser (Chrome works best for me) here:
+
+
+[https://jconallen.github.io/ChickensAndCornGame](https://jconallen.github.io/ChickensAndCornGame)
+
+
+If you find this application useful, drop me a line.  It might encourage me to keep it updated.
 
 Have fun.
 
