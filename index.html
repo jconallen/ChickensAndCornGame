@@ -40,11 +40,9 @@
 						<button type="button" class="btn btn-default" onclick="next()" id="nextBtn">
 							<span class="glyphicon glyphicon-step-forward"></span> Next Move
 						</button>
-						<!-- 
-						<button type="button" class="btn btn-default" onclick="run()" id="runBtn">
-							<span class="glyphicon glyphicon-play"></span> Run to Completion
+						<button type="button" class="btn btn-default" onclick="prev()" id="prevBtn">
+							<span class="glyphicon glyphicon-step-backward"></span> Prev Move
 						</button>
-						 -->
 						<button type="button" class="btn btn-default" onclick="restart()" id="restartBtn">
 							<span class="glyphicon glyphicon-refresh"></span> Restart
 						</button>
@@ -261,7 +259,7 @@
 		Game._setBoard(board);
 		
 		var title = document.getElementById("titleGameboard");
-		title.innerHTML = "Gameboard - Moves: " + Game.moves();
+		title.innerHTML = "Gameboard - Moves: " + Game.currentMove() + '/' + Game.totalMoves();
 		
 		// update algorithm boxes
 		var elm;
@@ -303,10 +301,11 @@
 		updateDisplay();
 	}
 	
-	function run(){
-		while( ! next() ){
+	function prev(){
+		var curMove = Game.currentMove();
+		if( curMove > 0 ) {
+			Game._prev();
 			updateDisplay();
-			pause(2000);
 		}
 	}
 	

@@ -37,7 +37,8 @@ class Piece {
 			Me = this;
 			result = eval(this._algorithm);
 		} catch( err ) {
-			throw err;
+			var msg = "Error thrown from " + Me.name + " algorithm\n" + err;
+			throw msg;
 		}
 		
 		if( result.charAt(0) == 'X' ) {
@@ -127,7 +128,8 @@ class _Game {
 	
 	constructor( ) {
 		
-		this._moves = 0;
+		this._curMove = 0;
+		this._boardPositions = [];
 
 	}
 
@@ -147,8 +149,12 @@ class _Game {
 	}
 
 	
-	moves(){
-		return this._moves;
+	totalMoves(){
+		return this._boardPositions.length;
+	}
+	
+	currentMove(){
+		return this._curMove;
 	}
 	
 	
@@ -270,30 +276,83 @@ class _Game {
 		Hen.position = new Position(4,7);
 		Hen._active = true;
 		
-		this._moves = 0;
+		this._curMove = 0;
+		this._boardPositions = [];
+		this._cacheBoardPositions();
 
 	};
 	
-	_next(){
-		// first farmer moves
-		if( Farmer.isActive() ){
-			Farmer._next();
-		}
-		if( Wife.isActive() ) {
-			Wife._next();
-		}
-		if( Rooster.isActive() ) {
-			Rooster._next();
-		}
-		if( Hen.isActive() ) {
-			Hen._next();
-		}
-		this._moves += 1;
+	_cacheBoardPositions(){
+		var positions = {
+				"Rooster": { "row": Rooster.position.row, "col": Rooster.position.col, "active": Rooster.isActive() },
+				"Farmer": { "row": Farmer.position.row, "col": Farmer.position.col, "active": Farmer.isActive() },
+				"Wife": { "row": Wife.position.row, "col": Wife.position.col, "active": Wife.isActive() },
+				"Hen": { "row": Hen.position.row, "col": Hen.position.col, "active": Hen.isActive() },
+		};
+		this._boardPositions.push(positions);
+
+	}
+	
+	_getBoard(){
+
+		if( this._curMove < this.totalMoves() ) {
+			// dig one out of the cache
+			var positions = this._boardPositions[this._curMove];
+			
+			Rooster.position.row = positions["Rooster"].row;
+			Rooster.position.col = positions["Rooster"].col;
+			Rooster._active = positions["Rooster"].active;
+			
+			Farmer.position.row = positions["Farmer"].row;
+			Farmer.position.col = positions["Farmer"].col;
+			Farmer._active = positions["Farmer"].active;
+			
+			Wife.position.row = positions["Wife"].row;
+			Wife.position.col = positions["Wife"].col;
+			Wife._active = positions["Wife"].active;
+			
+			Hen.position.row = positions["Hen"].row;
+			Hen.position.col = positions["Hen"].col;
+			Hen._active = positions["Hen"].active;
+
+			
+		} else {
+
+			// we have new position to compute
+			// first farmer moves
+			if( Farmer.isActive() ){
+				Farmer._next();
+			}
+			if( Wife.isActive() ) {
+				Wife._next();
+			}
+			if( Rooster.isActive() ) {
+				Rooster._next();
+			}
+			if( Hen.isActive() ) {
+				Hen._next();
+			}
+			
+			this._cacheBoardPositions();
+			
+		} 
 		
 		return ( Farmer.isActive() || Wife.isActive() );
 	};
 	
 
+
+	_next(){
+		this._curMove += 1;
+		return this._getBoard();
+	}
+
+	_prev( ) {
+		if( this._curMove> 0 ){
+			this._curMove -= 1;
+		}
+		return this._getBoard();
+	}
 	
 }
 
