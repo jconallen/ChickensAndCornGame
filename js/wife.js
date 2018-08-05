@@ -1,18 +1,19 @@
-if( Wife.isNextTo(Rooster) ){
-	Game.log("Wife: captured Rooster!");
-	Wife.capture(Rooster);
+if( Me.isNextTo(Rooster) ){
+	Game.log(Me.name + ": captured Rooster!");
+	Me.capture(Rooster);
 } else {
 	
-	var fr = Wife.position.row;
-	var fc = Wife.position.col;
+	var fr = Me.position.row;
+	var fc = Me.position.col;
 	
-	var distances = []; 
+	var distances = [];
+	var distance;
 
     var minDistance = 14; // farthest possible distance
 
 
     if( fc+1<=7 && !Game.isOccupied(fr, fc+1) ) {
-        var distance = Rooster.distanceTo(fr, fc+1 );
+        distance = Rooster.distanceTo(fr, fc+1 );
         distances.push( { "direction": "R", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;

@@ -61,6 +61,9 @@
 						<button type="button" class="btn btn-default" onclick="setPosition(Hen)" id="btnSetHen">
 							H
 						</button>
+						<button type="button" class="btn btn-default" onclick="avg()" id="avgBtn">
+							<span class="glyphicon glyphicon-list-alt"></span> 100 Avg
+						</button>
 				</div>
 		    </div>
 	    </div>
@@ -287,18 +290,15 @@
 		try{
 			if( !Game._next() ) {
 				// if returns true, then game over, .. man.
-				
 				var elm;
 				elm = document.getElementById("nextBtn");
 				elm.disabled = true;
-				//elm = document.getElementById("runBtn");
-				//elm.disabled = true;
 			};
 			
 		} catch( err ) {
 			alert(err);
 		}
-		updateDisplay();
+		updateDisplay(); 
 	}
 	
 	function prev(){
@@ -319,6 +319,23 @@
 		elm = document.getElementById("console");
 		elm.value = "";
 		updateDisplay();
+	}
+	
+	function avg(){
+		var sum = 0;
+		for(var i=0; i<10; i++) {
+			try{
+				while( Game._next() );
+				var m = Game.totalMoves();
+				Game._reset();
+				sum += m;
+				console.log('run: ' + m );
+			} catch( err ) {
+				alert(err);
+			}
+		}
+		alert( 'total: ' + (sum/10) );
+		restart();
 	}
 	
 	function updateAlgorithms(){

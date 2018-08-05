@@ -1,9 +1,7 @@
 if( Me.isNextTo(Hen) ){
-	Game.log("Farmer: captured Hen!");
+	Game.log(Me.name + ": captured Hen!");
 	Me.capture(Hen);
 } else {
-	
-    var msg = "Farmer: ";
    
 	var fr = Me.position.row;
 	var fc = Me.position.col;
@@ -44,7 +42,7 @@ if( Me.isNextTo(Hen) ){
         	minDistance = distance;
         }
     }
-    Game.log( "Faarmer: " + JSON.stringify(distances) );
+    Game.log( Me.name + ": " + JSON.stringify(distances) );
     
     var minDistances = [];
     for(var i=0; i<distances.length; i++){
@@ -65,6 +63,6 @@ if( Me.isNextTo(Hen) ){
     }
     
     
-    Game.log(msg + " -> "+minDirection + "[" + minDistance + "]");
+    Game.log(Me.name + " -> "+minDirection + "[" + minDistance + "]");
     minDirection;
 }
