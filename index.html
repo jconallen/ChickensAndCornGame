@@ -259,7 +259,7 @@
 		Game._setBoard(board);
 		
 		var title = document.getElementById("titleGameboard");
-		title.innerHTML = "Gameboard - Moves: " + Game.currentMove() + '/' + Game.totalMoves();
+		title.innerHTML = "Gameboard - Moves: " + Game.currentMove() + '/' + Game.totalMoves()-1;
 		
 		// update algorithm boxes
 		var elm;
