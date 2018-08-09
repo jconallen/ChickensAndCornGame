@@ -36,5 +36,4 @@ if( fr-1>=0 && !Game.isOccupied(fr-1, fc) ) {
     }
 }
 
-
 maxDirection;

@@ -1,5 +1,5 @@
 if( Me.isNextTo(Hen) ){
-	Game.log(Me.name + ": captured Hen!");
+	log(Me.name + ": captured Hen!");
 	Me.capture(Hen);
 } else {
    
@@ -42,7 +42,7 @@ if( Me.isNextTo(Hen) ){
         	minDistance = distance;
         }
     }
-    Game.log( Me.name + ": " + JSON.stringify(distances) );
+    log( Me.name + ": " + JSON.stringify(distances) );
     
     var minDistances = [];
     for(var i=0; i<distances.length; i++){
@@ -63,6 +63,6 @@ if( Me.isNextTo(Hen) ){
     }
     
     
-    Game.log(Me.name + " -> "+minDirection + "[" + minDistance + "]");
+    log(Me.name + " -> "+minDirection + "[" + minDistance + "]");
     minDirection;
 }

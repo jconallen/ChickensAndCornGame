@@ -6,7 +6,8 @@ class Piece {
 		this._algorithm = code;
 		this.position = position;
 	}
-	
+
+		
 	capture( piece ) {
 		if( piece instanceof Piece ) {
 		   if( (this.name == "Farmer" || this.name == "Wife") &&  (piece.name == "Rooster" || piece.name == "Hen") ) {
@@ -28,7 +29,12 @@ class Piece {
 		return this._active;
 	}
 	
+	
 	_next(){
+		
+		if( Game.availableMoves.length>100 ) {
+			throw 'number of moves exceeded 1000, canceling simulation';
+		}
 		
 		var availableMoves = Game.availableMoves(this.position);
 		
@@ -133,22 +139,6 @@ class _Game {
 
 	}
 
-	log(msg){
-		var elm = document.getElementById("console");
-		if( elm ) {
-			var val = elm.value;
-			if( val.length>0 ){
-				val = val + '\n' + msg;
-			} else {
-				val = msg;
-			}
-			
-			elm.value = val;
-			elm.scrollTop = elm.scrollHeight;
-		}
-	}
-
-	
 	totalMoves(){
 		return this._boardPositions.length;
 	}
@@ -157,6 +147,9 @@ class _Game {
 		return this._curMove;
 	}
 	
+	isActive(){
+		return ( Farmer.isActive() || Wife.isActive() );
+	}
 	
 	isOccupied(arg1, arg2){
 		var row;
@@ -223,42 +216,6 @@ class _Game {
 		
 	}
 	
-	_setBoard(table) {
-
-		// first clear all rows/cols
-		for( var r = 2; r<table.rows.length; r++){
-			for( var c = 1; c<=table.rows[r].cells.length; c++ ) {
-				if( table.rows[r].cells[c] ) {
-					table.rows[r].cells[c].innerHTML = " ";
-				}
-			}
-		}
-		
-		if( Rooster.isActive() ) {
-			table.rows[Rooster.position.row+2].cells[Rooster.position.col+1].innerHTML = "R";
-		} else {
-			table.rows[Rooster.position.row+2].cells[Rooster.position.col+1].innerHTML = "X";
-		}
-
-		if( Farmer.isActive() ) {
-			table.rows[Farmer.position.row+2].cells[Farmer.position.col+1].innerHTML = "F";
-		} else {
-			table.rows[Farmer.position.row+2].cells[Farmer.position.col+1].innerHTML = "X";
-		}
-		
-		if( Wife.isActive() ) {
-			table.rows[Wife.position.row+2].cells[Wife.position.col+1].innerHTML = "W";
-		} else {
-			table.rows[Wife.position.row+2].cells[Wife.position.col+1].innerHTML = "X";
-		}
-
-		if( Hen.isActive() ) {
-			table.rows[Hen.position.row+2].cells[Hen.position.col+1].innerHTML = "H";
-		} else {
-			table.rows[Hen.position.row+2].cells[Hen.position.col+1].innerHTML = "X";
-		}
-
-	}
 	
 	// Private methods not expected to be used by pieces.
 

@@ -1,5 +1,5 @@
 if( Me.isNextTo(Rooster) ){
-	Game.log(Me.name + ": captured Rooster!");
+	log(Me.name + ": captured Rooster!");
 	Me.capture(Rooster);
 } else {
 	
