@@ -412,8 +412,8 @@
 			gameWorker.onmessage = function(event){
 				if( event.data.log ) {
 					log(event.data.log);
-				}
-				if( event.data.ready ) {
+				} else {
+					$('#nextBtn').prop("disabled", !event.data.ready);
 					
 					currentMove = event.data.currentMove;
 					totalMoves = event.data.totalMoves;
@@ -439,11 +439,9 @@
 					Hen.col = player.col;
 					Hen.active = player.active;
 					
-					$('#nextBtn').prop("disabled",false);
-				} else {
-					$('#nextBtn').prop("disabled",true);
+
+					updateDisplay();
 				}
-				updateDisplay();
 			}
 		}
 		
