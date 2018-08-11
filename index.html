@@ -49,9 +49,11 @@
 						<button type="button" class="btn btn-default" onclick="updateAlgorithms()" id="updateBtn">
 							<span class="glyphicon glyphicon-cloud-upload"></span> Update Algorithms
 						</button>
+						<!-- 
 						<button type="button" class="btn btn-default" onclick="multiRun()" id="multiRunBtn">
-							<span class="glyphicon glyphicon-list-alt"></span> Multi-run
+							<span class="glyphicon glyphicon-list-alt"></span>&nbsp;<span id="simBtn" >Start Simulations</span> 
 						</button>
+						 -->
 				</div>
 		    </div>
 	    </div>
@@ -242,7 +244,7 @@
 	    
 	<script src="js/position.js"></script>
 	<script src="js/piece.js"></script>
-	<script src="js/game2.js"></script>
+	<script src="js/game.js"></script>
 	<script type="text/javascript">
 	
 	// initial piece placements	
@@ -280,6 +282,7 @@
 
 	var currentMove = 0;
 	var totalMoves = 1;
+	var gameReady = false;
 	
 	var gameWorker;
 	
@@ -294,6 +297,9 @@
 		$('#farmerAlgorithm').innerHTML = Farmer.algorithm;
 		$('#wifeAlgorithm').innerHTML = Wife.algorithm;
 		$('#henAlgorithm').innerHTML = Hen.algorithm;
+		
+		$('#nextBtn').prop("disabled", !gameReady);
+		$('#prevBtn').prop("disabled", !(currentMove>0 && gameReady));
 		
 	}
 
@@ -334,13 +340,7 @@
 
 	}
 	
-	function restart(){
-		$('#nextBtn').prop("disabled",true);
-		$('#prevBtn').prop("disabled",true);
-		
-		var elm = document.getElementById("console");
-		elm.value = "";
-		
+	function initializationData(){
 		currentMove = 0;
 		totalMoves = 1;  // the initial board set
 		
@@ -366,7 +366,7 @@
 		
 		updateAlgorithms();
 		
-		var initializationData = {
+		var data = {
 				"rooster": Rooster,
 				"farmer": Farmer,
 				"wife": Wife,
@@ -374,16 +374,21 @@
 				"currentMove": 0,
 				"totalMoves": 0
 			};
-			
-		gameWorker.postMessage({ "action": "initialize", "pieces": initializationData } );	
 
+		return data;
+	}
+	
+	function restart(){
+		$('#nextBtn').prop("disabled",true);
+		$('#prevBtn').prop("disabled",true);
+		
+		var elm = document.getElementById("console");
+		elm.value = "";
+		
+		gameWorker.postMessage({ "action": "initialize", "pieces": initializationData() } );	
+		
 		updateDisplay();
 	}
-	
-	function multiRun(){
-		$('#avgModal').modal('show');
-	}
-	
 	
 	function log(msg){
 		var elm = document.getElementById("console");
@@ -413,7 +418,8 @@
 				if( event.data.log ) {
 					log(event.data.log);
 				} else {
-					$('#nextBtn').prop("disabled", !event.data.ready);
+					
+					gameReady = event.data.ready;
 					
 					currentMove = event.data.currentMove;
 					totalMoves = event.data.totalMoves;
@@ -445,14 +451,7 @@
 			}
 		}
 		
-		var initializationData = {
-			"rooster": Rooster,
-			"farmer": Farmer,
-			"wife": Wife,
-			"hen": Hen
-		};
-		
-		gameWorker.postMessage({ "action": "initialize", "pieces": initializationData } );	
+		gameWorker.postMessage( { "action": "initialize", "pieces": initializationData() } );	
 		
  	}
 	
@@ -462,123 +461,6 @@
 	
 	function prev(){
 		gameWorker.postMessage({ "action": "prev" } );
-	}
-	
-
-	
-	//=====================================================================================================
-	// Simulation (multiRun) functions
-	
-	var simulationWorker;
-	
-	function multiRun(){
-		// toggles
-		if( typeof(simulationWorker) == "undefined" ) {
-			simulationWorker = new Worker("js/gameWorker.js");
-			simulationWorker.onmessage = function(event){
-				if( event.data.log ) {
-					log(event.data.log);
-				}
-				if( event.data.ready ) {
-					setTimeout( gameWorker.postMessage({ "action": "next" } ), 100 );	
-				} 
-				
-				if( event.data.totalMoves ) {
-					multilog( event.data.totalMoves );
-					// reset
-					
-				}
-			}
-			var initializationData = {
-					"rooster": Rooster,
-					"farmer": Farmer,
-					"wife": Wife,
-					"hen": Hen
-				};
-				
-			simulationWorker.postMessage({ "action": "initialize", "pieces": initializationData } );	
-		} else {
-			simulationWorker.terminate();
-		}
-		
-	}
-	
-	function stopSimulation(){
-		simulationWorker.terminate();
-	}
-	
-	function startSimulation() {
-		if( typeof(simulationWorker) == "undefined" ) {
-			simulationWorker = new Worker("js/gameWorker.js");
-			simulationWorker.onmessage = function(event){
-				if( event.data.log ) {
-					log(event.data.log);
-				}
-				if( event.data.ready ) {
-					setTimeout( gameWorker.postMessage({ "action": "next" } ), 100 );	
-				} 
-				
-				if( event.data.totalMoves ) {
-					multilog( event.data.totalMoves );
-					// reset
-					
-				}
-			}
-		}
-		
-		var initializationData = {
-			"rooster": Rooster,
-			"farmer": Farmer,
-			"wife": Wife,
-			"hen": Hen
-		};
-		
-		simulationWorker.postMessage({ "action": "initialize", "pieces": initializationData } );	
-		
- 	}
-	
-	function simulationNext(){
-		while( gameRunning) {
-			setTimeout( simulationWorker.postMessage({ "action": "next" } ), 100 );	
-		}
-		
-/* 		for( var i=0; i<5; i++ ) {
-			Game._reset();
-			setTimeout(simulateRun(), 1000);
-			var m = Game.totalMoves();
-			alert(m);
-		}
- */
-
-	}
-	
-	function simulateRun(){
-		setTimeout(Game._next(), 1);
-		var stillRunning = Game.isActive();
-		while( stillRunning ){
-			setTimeout(Game._next(), 1);
-			stillRunning = Game.isActive();
-			//console.log(Game.totalMoves());
-		}
-	}
-	
-	function simLog(msg){
-		var elm = document.getElementById("multirunConsole");
-		if( elm ) {
-			var val = elm.value;
-			if( val.length>0 ){
-				val = val + '\n' + msg;
-			} else {
-				val = msg;
-			}
-			
-			elm.value = val;
-			elm.scrollTop = elm.scrollHeight;
-		}
-	}
-
-	function stopSimulation() {
-	
 	}
 	
 
@@ -603,35 +485,6 @@
 		Hen._algorithm = algorithm;
 	}
 	
-	function setPosition(piece){
-		var board = document.getElementById('gameboard'),
-	    cells = board.getElementsByTagName('td');
-
-		for (var i=0,len=cells.length; i<len; i++){
-	    	cells[i].onclick = function(){
-	    		var col = Number(this.id.charAt(1));
-	    		var row = Number(this.id.charAt(3));
-		        
-		        if( !Game.isOccupied(row, col) ) {
-		        	piece.row = row;
-		        	piece.col = col;
-			        for (var j=0,len=cells.length; j<len; j++){
-				    	cells[j].onclick = null;
-					}
-			        setBoard(board);
-		        } else {
-					alert("Position must be empty to set another piece.");		        	
-		        }
-		        
-	    	}
-		}
-		updateDisplay();
-		
-	};
-	
-	
-
-
 	function readDefaultAlgorithm(piece, url, elm)	{
 	    var rawFile = new XMLHttpRequest();
 	    rawFile.open("GET", url, false);
@@ -684,49 +537,50 @@
 	var oldCell;
 	
 	function tableText(tableCell) {
-		var val = tableCell.innerHTML;
-		if( val != " " ){
-			pieceCode = tableCell.innerHTML;
-		    oldColor = tableCell.style.backgroundColor;
-		    tableCell.style.backgroundColor = "lightGreen";
-		    oldCell = tableCell;
-		    movingPiece = true;
-		} else if( movingPiece ) {
-			tableCell.innerHTML = pieceCode;	
-			oldCell.innerHTML = " ";
-			oldCell.style.backgroundColor = oldColor;
-			movingPiece = false;
-			oldCell = undefined;
-			oldColor = undefined;
-			
-			var id = tableCell.id;
-			var row = Number(id.charAt(1));
-			var col = Number(id.charAt(3));
-			if( pieceCode == 'R' ) {
-				Rooster.row = row;
-				Rooster.col = col;
+		if( currentMove == (totalMoves-1) ){
+			var val = tableCell.innerHTML;
+			if( val != " " ){
+				pieceCode = tableCell.innerHTML;
+			    oldColor = tableCell.style.backgroundColor;
+			    tableCell.style.backgroundColor = "lightGreen";
+			    oldCell = tableCell;
+			    movingPiece = true;
+			} else if( movingPiece ) {
+				tableCell.innerHTML = pieceCode;	
+				oldCell.innerHTML = " ";
+				oldCell.style.backgroundColor = oldColor;
+				movingPiece = false;
+				oldCell = undefined;
+				oldColor = undefined;
+				
+				var id = tableCell.id;
+				var row = Number(id.charAt(3));
+				var col = Number(id.charAt(1));
+				if( pieceCode == 'R' ) {
+					Rooster.row = row;
+					Rooster.col = col;
+				}
+				if( pieceCode == 'F' ) {
+					Farmer.row = row;
+					Farmer.col = col;
+				}
+				if( pieceCode == 'W' ) {
+					Wife.row = row;
+					Wife.col = col;
+				}
+				if( pieceCode == 'H' ) {
+					Hen.row = row;
+					Hen.col = col;
+				}
+				
+				gameWorker.postMessage({ 
+					"action": "set", 
+					"rooster": { "row": Rooster.row, "col": Rooster.col },
+					"farmer": { "row": Farmer.row, "col": Farmer.col },
+					"wife": { "row": Wife.row, "col": Wife.col },
+					"hen": { "row": Hen.row, "col": Hen.col }				
+				} );
 			}
-			if( pieceCode == 'F' ) {
-				Farmer.row = row;
-				Farmer.col = col;
-			}
-			if( pieceCode == 'W' ) {
-				Wife.row = row;
-				Wife.col = col;
-			}
-			if( pieceCode == 'H' ) {
-				Hen.row = row;
-				Hen.col = col;
-			}
-			
-			gameWorker.postMessage({ 
-				"action": "set", 
-				"rooster": { "row": Rooster.row, "col": Rooster.col },
-				"farmer": { "row": Farmer.row, "col": Farmer.col },
-				"wife": { "row": Wife.row, "col": Wife.col },
-				"hen": { "row": Hen.row, "col": Hen.col }				
-			} );
-			
 		}
 	}
 	

@@ -1,35 +1,35 @@
-var fr = Me.position.row;
-var fc = Me.position.col;
+var row = Me.position.row;
+var col = Me.position.col;
 
 var maxDistance = 0;
 var maxDirection;
 
-if( fc+1<=7 && !Game.isOccupied(fr, fc+1) ) {
-    var distance = Farmer.distanceTo(fr, fc+1 );
+if( col+1<=7 && !Game.isOccupied(row, col+1) ) {
+    var distance = Farmer.distanceTo(row, col+1 );
     if( distance > maxDistance ){
     	maxDistance = distance;
     	maxDirection = "R";
     }
 }
   
-if( fc-1>=0 && !Game.isOccupied(fr, fc-1) ) {
-    distance = Farmer.distanceTo(fr, fc-1 );
+if( col-1>=0 && !Game.isOccupied(row, col-1) ) {
+    distance = Farmer.distanceTo(row, col-1 );
     if( distance > maxDistance ){
     	maxDistance = distance;
     	maxDirection = "L";
     }
 }
 
-if( fr+1<=7 && !Game.isOccupied(fr+1, fc) ) {
-    distance = Farmer.distanceTo(fr+1, fc );
+if( row+1<=7 && !Game.isOccupied(row+1, col) ) {
+    distance = Farmer.distanceTo(row+1, col );
     if( distance > maxDistance ){
     	maxDistance = distance;
     	maxDirection = "D";
     }
 }
 
-if( fr-1>=0 && !Game.isOccupied(fr-1, fc) ) {
-    distance = Farmer.distanceTo(fr-1, fc );
+if( row-1>=0 && !Game.isOccupied(row-1, col) ) {
+    distance = Farmer.distanceTo(row-1, col );
     if( distance > maxDistance ){
     	maxDistance = distance;
     	maxDirection = "U";

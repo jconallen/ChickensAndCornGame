@@ -1,4 +1,4 @@
-self.importScripts('position.js', 'piece.js', 'game2.js');
+self.importScripts('position.js', 'piece.js', 'game.js');
 
 const Rooster = new Piece( "Rooster", false  );
 const Farmer = new Piece( "Farmer", true );
@@ -7,8 +7,6 @@ const Hen = new Piece( "Hen", false );
 var Me;
 
 var Game = new _Game();
-
-var initialized = false;
 
 function log(msg){
 	var msg = { "log": msg };
@@ -32,24 +30,15 @@ onmessage = function(e){
 		player = e.data.pieces.hen;
 		Hen.init( player.row, player.col, player.algorithm, player.active, player.visible );
 		
+		var gameState = Game._gameState();
+		postMessage( gameState );
 
-		initialized = true;
-		postMessage( { 
-			"ready": Game.isActive(),
-			"pieces": e.data.pieces,
-			"currentMove": 0,
-			"totalMoves": 1
-		} );
 		
 	} else if( e.data.action == "next" ) {
 		
 		try{
 			Game._next();
-			var moves = Game.totalMoves();
 			var gameState = Game._gameState();
-			if( !Game.isActive() ) {
-				gameState.totalMoves = Game.totalMoves();
-			}
 			postMessage( gameState );
 		} catch( err ) {
 			log( err );
@@ -66,17 +55,16 @@ onmessage = function(e){
 	} else if( e.data.action == "set" ) {
 		// set the pieces on the board
 		player = e.data.rooster;
-		Rooster.init( player.row, player.col, player.algorithm, player.active, player.visible );
+		Rooster.setPosition( player.row, player.col );
 		player = e.data.farmer;
-		Farmer.init( player.row, player.col, player.algorithm, player.active, player.visible );
+		Farmer.setPosition( player.row, player.col );
 		player = e.data.wife;
-		Wife.init( player.row, player.col, player.algorithm, player.active, player.visible );
+		Wife.setPosition( player.row, player.col );
 		player = e.data.hen;
-		Hen.init( player.row, player.col, player.algorithm, player.active, player.visible );
+		Hen.setPosition( player.row, player.col );
 		var gameState = Game._gameState();
 		postMessage( gameState );
-	}
-
+	} 
 };
 
 

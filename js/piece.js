@@ -12,6 +12,10 @@ class Piece {
 		this.position = new Position(row, col);		
 	}
 	
+	setPosition( row, col ){
+		this.position = new Position(row, col);		
+	}
+	
 	capture( piece ) {
 		if( piece instanceof Piece ) {
 		   if( (this.name == "Farmer" || this.name == "Wife") &&  (piece.name == "Rooster" || piece.name == "Hen") ) {
@@ -97,8 +101,10 @@ class Piece {
 	}
 	
 	isNextTo(peice) {
-		
-		return peice.position.isNextTo(this.position);
+		if( peice.isActive() ) {
+			return peice.position.isNextTo(this.position);
+		} 
+		return false;
 	}
 	
 	moveRandom(){
