@@ -3,40 +3,40 @@ if( Me.isNextTo(Hen) ){
 	Me.capture(Hen);
 } else {
    
-	var fr = Me.position.row;
-	var fc = Me.position.col;
+    var row = Me.position.row;
+    var col = Me.position.col;
 	
-	var distances = []; 
-
-    var minDistance = 14; // farthest possible distance
+    var distances = [];
     var distance;
 
-    if( fc+1<=7 && !Game.isOccupied(fr, fc+1) ) {
-        distance = Hen.distanceTo(fr, fc+1 );
+    var minDistance = 14; // farthest possible distance
+
+    if( col+1<=7 && !Game.isOccupied(row, col+1) ) {
+        distance = Hen.distanceTo(row, col+1 );
         distances.push( { "direction": "R", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
         }
     }
   
-    if( fc-1>=0 && !Game.isOccupied(fr, fc-1) ) {
-        distance = Hen.distanceTo(fr, fc-1 );
+    if( col-1>=0 && !Game.isOccupied(row, col-1) ) {
+        distance = Hen.distanceTo(row, col-1 );
         distances.push( { "direction": "L", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
         }
     }
     
-    if( fr+1<=7 && !Game.isOccupied(fr+1, fc) ) {
-        distance = Hen.distanceTo(fr+1, fc );
+    if( row+1<=7 && !Game.isOccupied(row+1, col) ) {
+        distance = Hen.distanceTo(row+1, col );
         distances.push(  { "direction": "D", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
         }
     }
     
-    if( fr-1>=0 && !Game.isOccupied(fr-1, fc) ) {
-        distance = Hen.distanceTo(fr-1, fc );
+    if( row-1>=0 && !Game.isOccupied(row-1, col) ) {
+        distance = Hen.distanceTo(row-1, col );
         distances.push(  { "direction": "U", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;

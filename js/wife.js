@@ -3,41 +3,40 @@ if( Me.isNextTo(Rooster) ){
 	Me.capture(Rooster);
 } else {
 	
-	var fr = Me.position.row;
-	var fc = Me.position.col;
+    var row = Me.position.row;
+    var col = Me.position.col;
 	
-	var distances = [];
-	var distance;
+    var distances = [];
+    var distance;
 
     var minDistance = 14; // farthest possible distance
 
-
-    if( fc+1<=7 && !Game.isOccupied(fr, fc+1) ) {
-        distance = Rooster.distanceTo(fr, fc+1 );
+    if( col+1<=7 && !Game.isOccupied(row, col+1) ) {
+        distance = Rooster.distanceTo(row, col+1 );
         distances.push( { "direction": "R", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
         }
     }
   
-    if( fc-1>=0 && !Game.isOccupied(fr, fc-1) ) {
-        distance = Rooster.distanceTo(fr, fc-1 );
+    if( col-1>=0 && !Game.isOccupied(row, col-1) ) {
+        distance = Rooster.distanceTo(row, col-1 );
         distances.push( { "direction": "L", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
         }
     }
     
-    if( fr+1<=7 && !Game.isOccupied(fr+1, fc) ) {
-        distance = Rooster.distanceTo(fr+1, fc );
+    if( row+1<=7 && !Game.isOccupied(row+1, col) ) {
+        distance = Rooster.distanceTo(row+1, col );
         distances.push(  { "direction": "D", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
         }
     }
     
-    if( fr-1>=0 && !Game.isOccupied(fr-1, fc) ) {
-        distance = Rooster.distanceTo(fr-1, fc );
+    if( row-1>=0 && !Game.isOccupied(row-1, col) ) {
+        distance = Rooster.distanceTo(row-1, col );
         distances.push(  { "direction": "U", "distance": distance } );
         if( distance < minDistance ){
         	minDistance = distance;
